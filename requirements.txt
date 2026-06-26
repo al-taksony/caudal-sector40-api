@@ -2,7 +2,9 @@ fastapi
 uvicorn
 joblib
 numpy
+pandas
 scikit-learn
 sqlalchemy
 python-decouple
 psycopg2-binary
+requests

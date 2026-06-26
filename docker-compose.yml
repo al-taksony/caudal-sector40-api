@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-caudal_sector40}
+      POSTGRES_USER: ${POSTGRES_USER:-caudal_sector40}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-caudal_sector40}
+    ports:
+      - "5442:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - caudal_sector40_net
+
+volumes:
+  postgres_data:
+
+networks:
+  caudal_sector40_net:
+    driver: bridge
